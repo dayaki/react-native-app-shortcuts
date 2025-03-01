@@ -1,8 +1,17 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import NativeRNAppShortcuts from './NativeRNAppShortcuts';
 
+// Add TypeScript declaration for global.__turboModuleProxy
+declare global {
+  var __turboModuleProxy:
+    | {
+        [key: string]: any;
+      }
+    | undefined;
+}
+
 const LINKING_ERROR =
-  `The package 'dayaki-react-native-app-shortcuts' doesn't seem to be linked. Make sure: \n\n` +
+  `The package '@dayaki/react-native-app-shortcuts' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
@@ -31,22 +40,22 @@ export interface Shortcut {
    * Unique identifier for the shortcut
    */
   type: string;
-  
+
   /**
    * Title to display for the shortcut
    */
   title: string;
-  
+
   /**
    * Optional subtitle (long label on Android)
    */
   subtitle?: string;
-  
+
   /**
    * Optional icon name (must be in app's assets)
    */
   iconName?: string;
-  
+
   /**
    * Optional additional data
    */
@@ -62,14 +71,14 @@ export interface ShortcutEvent {
 
 /**
  * React Native App Shortcuts
- * 
- * A module for handling iOS Quick Actions (UIApplicationShortcutItem) 
+ *
+ * A module for handling iOS Quick Actions (UIApplicationShortcutItem)
  * and Android App Shortcuts
  */
 const AppShortcuts = {
   /**
    * Check if shortcuts are supported on the device
-   * 
+   *
    * @returns Promise<boolean> - true if shortcuts are supported
    */
   isSupported(): Promise<boolean> {
@@ -78,7 +87,7 @@ const AppShortcuts = {
 
   /**
    * Get the shortcut that was used to launch the app (if any)
-   * 
+   *
    * @returns Promise<ShortcutEvent | null> - The shortcut event or null
    */
   getInitialShortcut(): Promise<ShortcutEvent | null> {
@@ -87,7 +96,7 @@ const AppShortcuts = {
 
   /**
    * Set dynamic shortcuts for the app
-   * 
+   *
    * @param shortcuts - Array of shortcut objects
    * @returns Promise<boolean> - true if successful
    */
@@ -97,7 +106,7 @@ const AppShortcuts = {
 
   /**
    * Clear all dynamic shortcuts
-   * 
+   *
    * @returns Promise<boolean> - true if successful
    */
   clearShortcuts(): Promise<boolean> {
@@ -106,7 +115,7 @@ const AppShortcuts = {
 
   /**
    * Add a listener for when a shortcut is used while the app is running
-   * 
+   *
    * @param callback - Function to call when a shortcut is used
    * @returns Function - Call to remove the listener
    */
@@ -115,7 +124,7 @@ const AppShortcuts = {
       'RNAppShortcuts:ShortcutUsed',
       callback
     );
-    
+
     return () => subscription.remove();
   },
 };

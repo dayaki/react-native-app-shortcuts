@@ -82,12 +82,15 @@ This package fully supports React Native's New Architecture (Fabric & TurboModul
 To enable the New Architecture in your app:
 
 ### For iOS:
+
 ```sh
 RCT_NEW_ARCH_ENABLED=1 pod install
 ```
 
 ### For Android:
+
 Add to your `gradle.properties`:
+
 ```
 newArchEnabled=true
 ```
@@ -118,7 +121,7 @@ const setShortcuts = async () => {
       iconName: 'search_icon',
     },
   ];
-  
+
   const success = await AppShortcuts.setShortcuts(shortcuts);
   console.log('Shortcuts set:', success);
 };
@@ -160,7 +163,7 @@ const handleShortcut = (type) => {
 // Don't forget to remove the listener when component unmounts
 useEffect(() => {
   checkInitialShortcut();
-  
+
   return () => {
     shortcutListener(); // Remove listener
   };
@@ -207,8 +210,8 @@ Add a listener for when a shortcut is used while the app is running. Returns a f
 
 ```typescript
 interface Shortcut {
-  type: string;      // Unique identifier
-  title: string;     // Display title
+  type: string; // Unique identifier
+  title: string; // Display title
   subtitle?: string; // Optional subtitle
   iconName?: string; // Optional icon name
   userInfo?: Record<string, any>; // Optional additional data
@@ -219,7 +222,7 @@ interface Shortcut {
 
 ```typescript
 interface ShortcutEvent {
-  type: string;      // The type/id of the shortcut that was used
+  type: string; // The type/id of the shortcut that was used
 }
 ```
 

@@ -1,5 +1,5 @@
 {
-  "name": "dayaki-react-native-app-shortcuts",
+  "name": "@dayaki/react-native-app-shortcuts",
   "version": "1.1.0",
   "description": "React Native package for iOS UIApplicationShortcutItem and Android App Shortcuts",
   "main": "lib/commonjs/index",
@@ -84,7 +84,7 @@
     "react-native": "0.71.0",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.9.5"
   },
   "resolutions": {
     "@types/react": "17.0.21"
