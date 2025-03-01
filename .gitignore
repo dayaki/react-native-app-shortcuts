@@ -1,0 +1,83 @@
+# OSX
+#
+.DS_Store
+
+# Node
+#
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+ios/.xcode.env.local
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# Build artifacts
+#
+lib/
+dist/
+
+# Testing
+#
+coverage/
+.jest/
+
+# Editor files
+#
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+#
+*.log
+*.tmp
+*.temp
+
+# Environment files
+#
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Expo
+#
+.expo/
+web-build/
+
+# CocoaPods
+#
+/ios/Pods/
