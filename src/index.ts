@@ -1,12 +1,14 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import NativeRNAppShortcuts from './NativeRNAppShortcuts';
 
 const LINKING_ERROR =
-  `The package '@dayaki/react-native-app-shortcuts' doesn't seem to be linked. Make sure: \n\n` +
+  `The package 'dayaki-react-native-app-shortcuts' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const RNAppShortcuts = NativeModules.RNAppShortcuts
+// Fallback for when the New Architecture is not enabled
+const RNAppShortcutsOld = NativeModules.RNAppShortcuts
   ? NativeModules.RNAppShortcuts
   : new Proxy(
       {},
@@ -16,6 +18,11 @@ const RNAppShortcuts = NativeModules.RNAppShortcuts
         },
       }
     );
+
+// Use TurboModule if available, otherwise fall back to the old implementation
+const RNAppShortcuts = global.__turboModuleProxy
+  ? NativeRNAppShortcuts
+  : RNAppShortcutsOld;
 
 const eventEmitter = new NativeEventEmitter(RNAppShortcuts);
 

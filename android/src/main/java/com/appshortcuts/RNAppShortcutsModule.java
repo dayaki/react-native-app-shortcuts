@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ReactModule(name = RNAppShortcutsModule.NAME)
-public class RNAppShortcutsModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
+public class RNAppShortcutsModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener, RNAppShortcutsSpec {
     public static final String NAME = "RNAppShortcuts";
     private static final String SHORTCUT_USED_EVENT = "RNAppShortcuts:ShortcutUsed";
     private static String initialShortcutId = null;
@@ -50,92 +50,108 @@ public class RNAppShortcutsModule extends ReactContextBaseJavaModule implements 
         return NAME;
     }
 
-    @ReactMethod
+    @Override
     public void isSupported(Promise promise) {
-        promise.resolve(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            promise.resolve(true);
+        } else {
+            promise.resolve(false);
+        }
     }
 
-    @ReactMethod
+    @Override
     public void getInitialShortcut(Promise promise) {
-        if (initialShortcutId != null && !initialShortcutChecked) {
+        if (initialShortcutId != null) {
             WritableMap map = Arguments.createMap();
-            map.putString("type", initialShortcutId);
-            initialShortcutChecked = true;
+            map.putString("shortcutId", initialShortcutId);
             promise.resolve(map);
         } else {
             promise.resolve(null);
         }
     }
 
-    @ReactMethod
+    @Override
     public void setShortcuts(ReadableArray shortcutsArray, Promise promise) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             promise.resolve(false);
             return;
         }
 
-        Activity activity = getCurrentActivity();
-        if (activity == null) {
-            promise.reject("activity_null", "Activity is null");
-            return;
-        }
+        try {
+            Context context = getReactApplicationContext();
+            ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> shortcuts = new ArrayList<>();
 
-        Context context = getReactApplicationContext();
-        List<ShortcutInfoCompat> shortcuts = new ArrayList<>();
+            for (int i = 0; i < shortcutsArray.size(); i++) {
+                ReadableMap shortcut = shortcutsArray.getMap(i);
+                String id = shortcut.getString("id");
+                String title = shortcut.getString("title");
+                String subtitle = shortcut.hasKey("subtitle") ? shortcut.getString("subtitle") : null;
+                String iconName = shortcut.hasKey("iconName") ? shortcut.getString("iconName") : null;
 
-        for (int i = 0; i < shortcutsArray.size(); i++) {
-            ReadableMap shortcut = shortcutsArray.getMap(i);
-            String type = shortcut.getString("type");
-            String title = shortcut.getString("title");
-            String iconName = shortcut.hasKey("iconName") ? shortcut.getString("iconName") : null;
+                ShortcutInfo.Builder shortcutInfoBuilder = new ShortcutInfo.Builder(context, id)
+                        .setShortLabel(title);
 
-            if (type == null || title == null) {
-                promise.reject("invalid_shortcut", "Shortcut must contain at least type and title");
-                return;
-            }
-
-            Intent intent = new Intent(context, activity.getClass());
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.putExtra("shortcut_id", type);
-
-            ShortcutInfoCompat.Builder shortcutInfoBuilder = new ShortcutInfoCompat.Builder(context, type)
-                    .setShortLabel(title)
-                    .setIntent(intent);
-
-            if (shortcut.hasKey("subtitle")) {
-                shortcutInfoBuilder.setLongLabel(shortcut.getString("subtitle"));
-            }
-
-            if (iconName != null) {
-                int resourceId = context.getResources().getIdentifier(
-                        iconName, "drawable", context.getPackageName());
-                if (resourceId != 0) {
-                    shortcutInfoBuilder.setIcon(IconCompat.createWithResource(context, resourceId));
+                if (subtitle != null) {
+                    shortcutInfoBuilder.setLongLabel(subtitle);
                 }
+
+                if (iconName != null) {
+                    int resourceId = context.getResources().getIdentifier(
+                            iconName,
+                            "drawable",
+                            context.getPackageName()
+                    );
+                    if (resourceId != 0) {
+                        shortcutInfoBuilder.setIcon(Icon.createWithResource(context, resourceId));
+                    }
+                }
+
+                Intent intent = new Intent(context, context.getClass());
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.putExtra("shortcutId", id);
+
+                shortcutInfoBuilder.setIntent(intent);
+                shortcuts.add(shortcutInfoBuilder.build());
             }
 
-            shortcuts.add(shortcutInfoBuilder.build());
+            shortcutManager.setDynamicShortcuts(shortcuts);
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.reject("SET_SHORTCUTS_ERROR", e.getMessage());
         }
-
-        boolean result = ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts);
-        promise.resolve(result);
     }
 
-    @ReactMethod
+    @Override
     public void clearShortcuts(Promise promise) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             promise.resolve(false);
             return;
         }
 
-        Context context = getReactApplicationContext();
-        ShortcutManagerCompat.removeAllDynamicShortcuts(context);
-        promise.resolve(true);
+        try {
+            Context context = getReactApplicationContext();
+            ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+            shortcutManager.removeAllDynamicShortcuts();
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.reject("CLEAR_SHORTCUTS_ERROR", e.getMessage());
+        }
+    }
+
+    @Override
+    public void addListener(String eventName) {
+        // Keep: Required for RN built in Event Emitter Calls
+    }
+
+    @Override
+    public void removeListeners(double count) {
+        // Keep: Required for RN built in Event Emitter Calls
     }
 
     private void sendShortcutEvent(String shortcutId) {
         WritableMap params = Arguments.createMap();
-        params.putString("type", shortcutId);
+        params.putString("shortcutId", shortcutId);
         getReactApplicationContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(SHORTCUT_USED_EVENT, params);
@@ -152,14 +168,12 @@ public class RNAppShortcutsModule extends ReactContextBaseJavaModule implements 
     }
 
     private void handleIntent(Intent intent) {
-        if (intent != null && intent.hasExtra("shortcut_id")) {
-            String shortcutId = intent.getStringExtra("shortcut_id");
-            if (shortcutId != null) {
-                if (getReactApplicationContext().hasActiveReactInstance()) {
-                    sendShortcutEvent(shortcutId);
-                } else {
-                    initialShortcutId = shortcutId;
-                }
+        if (intent != null && intent.hasExtra("shortcutId")) {
+            String shortcutId = intent.getStringExtra("shortcutId");
+            if (getReactApplicationContext().hasActiveReactInstance()) {
+                sendShortcutEvent(shortcutId);
+            } else {
+                initialShortcutId = shortcutId;
             }
         }
     }

@@ -10,7 +10,7 @@ This package allows you to add home screen shortcuts to your React Native app, e
 - Handle shortcut selection events
 - Check if shortcuts are supported on the device
 - TypeScript support
-- Compatible with the new React Native architecture
+- **Full compatibility with React Native's New Architecture (Fabric & TurboModules)**
 
 ## Installation
 
@@ -74,6 +74,23 @@ override func application(_ application: UIApplication, performActionFor shortcu
 ### Android Setup
 
 No additional setup is required for Android.
+
+## New Architecture Support
+
+This package fully supports React Native's New Architecture (Fabric & TurboModules). When your app is built with the New Architecture enabled, the package will automatically use TurboModules for better performance.
+
+To enable the New Architecture in your app:
+
+### For iOS:
+```sh
+RCT_NEW_ARCH_ENABLED=1 pod install
+```
+
+### For Android:
+Add to your `gradle.properties`:
+```
+newArchEnabled=true
+```
 
 ## Usage
 

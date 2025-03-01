@@ -1,12 +1,20 @@
 {
   "name": "dayaki-react-native-app-shortcuts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React Native package for iOS UIApplicationShortcutItem and Android App Shortcuts",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
+  "codegenConfig": {
+    "name": "RNAppShortcutsSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.appshortcuts"
+    }
+  },
   "files": [
     "src",
     "lib",
