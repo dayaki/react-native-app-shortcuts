@@ -168,6 +168,7 @@ useEffect(() => {
     shortcutListener(); // Remove listener
   };
 }, []);
+```
 
 ## Icons
 
