@@ -3,7 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name         = 'react-native-app-shortcuts'
+  s.name         = '@dayaki/react-native-app-shortcuts'
   s.version      = package['version']
   s.summary      = package['description']
   s.homepage     = package['homepage']
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.authors      = package['author']
 
   s.platforms    = { :ios => '11.0' }
-  s.source       = { :git => 'https://github.com/yourusername/react-native-app-shortcuts.git', :tag => "v#{s.version}" }
+  s.source       = { :git => 'https://github.com/dayaki/react-native-app-shortcuts.git', :tag => "v#{s.version}" }
 
   s.source_files = 'ios/RNAppShortcuts/**/*.{h,m}'
 

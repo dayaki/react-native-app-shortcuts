@@ -1,6 +1,6 @@
 {
-  "name": "react-native-app-shortcuts",
-  "version": "0.1.0",
+  "name": "dayaki-react-native-app-shortcuts",
+  "version": "1.0.0",
   "description": "React Native package for iOS UIApplicationShortcutItem and Android App Shortcuts",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -46,14 +46,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/react-native-app-shortcuts.git"
+    "url": "git+https://github.com/dayaki/react-native-app-shortcuts.git"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Dayo Akinkuowo <hello@madebydayo.co>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/react-native-app-shortcuts/issues"
+    "url": "https://github.com/dayaki/react-native-app-shortcuts/issues"
   },
-  "homepage": "https://github.com/yourusername/react-native-app-shortcuts#readme",
+  "homepage": "https://github.com/dayaki/react-native-app-shortcuts#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

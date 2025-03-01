@@ -1,0 +1,30 @@
+# Development files
+example/
+example-usage.tsx
+.github/
+.vscode/
+.idea/
+
+# Build artifacts
+android/build/
+ios/build/
+lib/typescript/example/
+
+# Configuration files
+.eslintrc.js
+.prettierrc.js
+babel.config.js
+jest.config.js
+lefthook.yml
+tsconfig.build.json
+
+# Git files
+.git/
+.gitattributes
+.gitignore
+
+# Misc
+node_modules/
+npm-debug.log
+yarn-error.log
+.DS_Store

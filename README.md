@@ -1,4 +1,4 @@
-# react-native-app-shortcuts
+# @dayaki/react-native-app-shortcuts
 
 React Native package for iOS UIApplicationShortcutItem (Quick Actions) and Android App Shortcuts.
 
@@ -15,13 +15,13 @@ This package allows you to add home screen shortcuts to your React Native app, e
 ## Installation
 
 ```sh
-npm install react-native-app-shortcuts
+npm install @dayaki/react-native-app-shortcuts
 ```
 
 or
 
 ```sh
-yarn add react-native-app-shortcuts
+yarn add @dayaki/react-native-app-shortcuts
 ```
 
 ### iOS Setup
@@ -41,7 +41,7 @@ You need to modify your AppDelegate to handle shortcut selection events.
 Add the import at the top of your file:
 
 ```objective-c
-#import <react-native-app-shortcuts/RNAppShortcuts.h>
+#import <@dayaki/react-native-app-shortcuts/RNAppShortcuts.h>
 ```
 
 Add the following method to your AppDelegate implementation:
@@ -59,7 +59,7 @@ First, create or modify your bridging header to include:
 
 ```objective-c
 // Bridging-Header.h
-#import <react-native-app-shortcuts/RNAppShortcuts.h>
+#import <@dayaki/react-native-app-shortcuts/RNAppShortcuts.h>
 ```
 
 Then add the following method to your AppDelegate:
@@ -78,7 +78,7 @@ No additional setup is required for Android.
 ## Usage
 
 ```javascript
-import AppShortcuts from 'react-native-app-shortcuts';
+import AppShortcuts from '@dayaki/react-native-app-shortcuts';
 
 // Check if shortcuts are supported
 const checkSupport = async () => {
