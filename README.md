@@ -1,4 +1,4 @@
-# @dayaki/react-native-app-shortcuts
+# react-native-app-shortcuts
 
 React Native package for iOS UIApplicationShortcutItem (Quick Actions) and Android App Shortcuts.
 
